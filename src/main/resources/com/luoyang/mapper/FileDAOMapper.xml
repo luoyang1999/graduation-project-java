@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.luoyang.dao.FileDAO">
+
+    <!--save保存文件信息-->
+    <insert id="save" parameterType="UserFile">
+        insert into t_file values (#{id},#{old_name},#{new_name},#{ext},#{path},#{size},#{upload_time})
+    </insert>
+    <!--获取用户的文件列表-->
+    <select id="findFileList" parameterType="String" resultType="UserFile">
+        select id,old_name,new_name,ext,path,size,upload_time
+        from t_file
+    </select>
+    <!--分页查找-->
+    <select id="findByPage" resultType="UserFile">
+        select id,old_name,new_name,ext,path,size,upload_time
+        from t_file
+        limit #{start},#{rows}
+    </select>
+    <!--查询总记录数量-->
+    <select id="findTotals" resultType="Integer">
+        select count(id)
+        from t_file
+    </select>
+    <!--根据id查询文件记录-->
+    <select id="findById" parameterType="String" resultType="UserFile">
+        select id,old_name,new_name,ext,path,size,upload_time
+        from t_file
+        where id=#{id}
+    </select>
+    <!--删除文件记录-->
+    <delete id="delete" parameterType="String">
+        delete from t_file where id=#{id}
+    </delete>
+
+
+</mapper>
