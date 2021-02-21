@@ -26,7 +26,7 @@ public class CameraController {
     public Map<String,Object> findByPage(Integer pageNow, Integer pageSize){
         HashMap<String, Object> result = new HashMap<>();
         pageNow = pageNow==null?1:pageNow;
-        pageSize = pageSize==null?8:pageSize;
+        pageSize = pageSize==null?4:pageSize;
         List<Camera> cameras = cameraService.findByPage(pageNow, pageSize);
         Integer totals = cameraService.findTotal();
         result.put("cameras",cameras);

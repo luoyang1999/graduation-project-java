@@ -46,19 +46,20 @@ public class FileController {
         // 获取上传用户id
         String user_id = (String)model.getAttribute("user_id");
         System.out.println(user_id);
-
         // 获取文件的原始名称
         String oldFileName = aaa.getOriginalFilename();
         String extension = "." + FilenameUtils.getExtension(oldFileName);
+        // 生成随机字符串
+        String uuid = UUID.randomUUID().toString().substring(30);
         // 生成新的文件名称
         String newFileName =
-                new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + extension;
+                new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "-" + uuid+ extension;
         // 文件大小
         int size = (int)aaa.getSize();
         // 根据地址和日期生成目录
         String realPath = ResourceUtils.getURL("classpath:").getPath() + "/static/files";
         String dateFormat = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        String dateDirPath = realPath + "/" + dateFormat;
+        String dateDirPath = realPath + "/" + dateFormat + "/" + oldFileName.split("\\.")[0] + "-"+ uuid;
         File dateDir = new File(dateDirPath);
         if(!dateDir.exists()) dateDir.mkdirs();
         // 处理文件上传
@@ -71,7 +72,7 @@ public class FileController {
                 .setNew_name(newFileName)
                 .setExt(extension)
                 .setSize(size)
-                .setPath("/files/"+dateFormat);
+                .setPath("/files/"+dateFormat + "/" + oldFileName.split("\\.")[0]+ "-"+ uuid);
 
         fileService.save(userFile);
     }

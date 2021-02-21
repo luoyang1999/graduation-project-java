@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.luoyang.dao.AnalysisDAO">
+
+    <insert id="save" parameterType="Analysis">
+        insert into t_analysis
+        values(#{id},#{file_id},#{hall_name},#{begin_time},#{end_time},#{ocr_filename},#{wordcard_filename},#{action_filename},#{video_filename})
+    </insert>
+    
+    <!--保存营业厅名称 开始时间结束时间-->
+    <update id="saveOrc">
+        update t_analysis
+        set hall_name=#{hall_name},begin_time=#{begin_time},end_time=#{end_time}
+        where id=#{id}
+    </update>
+
+    <!--保存orc文件saveOrcFile-->
+    <update id="saveOrcFile">
+        update t_analysis
+        set orc_filename=#{orc_filename}
+        where id=#{id}
+    </update>
+
+    <!--保存wordcard文件saveWordcardFile-->
+    <update id="saveWordcardFile">
+        update t_analysis
+        set wordcard_filename=#{wordcard_filename}
+        where id=#{id}
+    </update>
+
+    <!--保存action文件saveActionFile-->
+    <update id="saveActionFile">
+        update t_analysis
+        set action_filename=#{action_filename}
+        where id=#{id}
+    </update>
+
+    <!--保存video文件saveVideo-->
+    <update id="saveVideo">
+        update t_analysis
+        set video_filename=#{video_filename}
+        where id=#{id}
+    </update>
+
+    <!--删除分析结果-->
+    <delete id="deleteAnalysis" parameterType="String">
+        delete from t_analysis
+        where id=#{id}
+    </delete>
+
+    <!--findAll-->
+    <select id="findAll" resultType="Analysis">
+        select * from t_analysis
+    </select>
+
+    <select id="findAnalysisByPage" resultType="Analysis">
+        select
+        t_analysis.id,file_id,t_file.old_name,hall_name,begin_time,end_time,ocr_filename,wordcard_filename,action_filename,video_filename
+        from t_analysis,t_file
+        where t_analysis.file_id=t_file.id
+        limit #{start},#{rows}
+    </select>
+
+    <!--查找总的记录数量-->
+    <select id="findAnalysisTotal" resultType="Integer">
+        select count(id) from t_analysis
+    </select>
+
+    <!--根据id查找某个分析结果-->
+    <select id="findById" resultType="Analysis">
+        select * from t_analysis
+        where id=#{id}
+    </select>
+
+    <!--findFileByPage 返回视频类型的文件-->
+    <select id="findFileByPage" resultType="Map">
+        select id,old_name,size,upload_time from t_file
+        where ext=".mp4"
+        limit #{start},#{rows}
+    </select>
+
+    <!--findFileTotal 返回视频类型的文件数量-->
+    <select id="findFileTotal" resultType="Integer">
+        select count(id) from t_file
+        where ext=".mp4"
+    </select>
+
+</mapper>
