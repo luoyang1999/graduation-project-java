@@ -18,4 +18,6 @@ public interface FileService {
     List<UserFile> findByPage(Integer pageNow, Integer rows);
     // 返回总记录数量
     Integer findTotals();
+    // 返回存储文件内总大小
+    Integer findTotalSize();
 }

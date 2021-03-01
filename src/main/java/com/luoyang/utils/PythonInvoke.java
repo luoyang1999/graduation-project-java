@@ -12,16 +12,14 @@ public class PythonInvoke implements Callable<Integer> {
 
     private final String args;          // 命令行执行指令
     private final File dir;             // 命令执行路径
-    private final String fileName;      // 文件名称（路径）
     private final String type;          // 分析任务类型
     private final String analysisId;    // 分析任务ID
     private final AnalysisService analysisService;  // analysis服务层
 
-    public PythonInvoke(String args, File dir, String fileName, String type,String analysisId,
+    public PythonInvoke(String args, File dir, String type,String analysisId,
                         AnalysisService analysisService){
         this.args = args;
         this.dir = dir;
-        this.fileName = fileName;
         this.type = type;
         this.analysisId = analysisId;
         this.analysisService = analysisService;
@@ -56,9 +54,10 @@ public class PythonInvoke implements Callable<Integer> {
             if(re==0){
                 System.out.println("正常结束python脚本");
                 if(this.type.equals("OCR分析")){
-                    this.analysisService.saveOrcFile(analysisId,fileName);
+                    this.analysisService.saveOcrFile(analysisId,"ocr.txt");
                 }else if(this.type.equals("工牌正反识别")){
                     this.analysisService.saveWordcardFile(analysisId,"wordcard.txt");
+                    this.analysisService.saveVideo(analysisId,"result.mp4");
                 }else if(this.type.equals("人体行为识别")){
                     this.analysisService.saveActionFile(analysisId,"action.txt");
                 }

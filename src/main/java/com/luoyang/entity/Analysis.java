@@ -12,9 +12,10 @@ import lombok.ToString;
 @ToString
 public class Analysis {
     private String id;
+    private String task_name;
     private String file_id;
-    private String old_name;
     private String hall_name;
+    private String remark;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private String begin_time;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")

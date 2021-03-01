@@ -33,5 +33,9 @@
         delete from t_file where id=#{id}
     </delete>
 
+    <!--查看当前的文件总大小-->
+    <select id="findTotalSize" resultType="Integer">
+        select sum(size) from t_file
+    </select>
 
 </mapper>

@@ -13,10 +13,10 @@ public interface AnalysisDAO {
     // 新增一个分析任务
     void save(Analysis analysis);
     // 保存orc功能识别的结果
-    void saveOrc(@Param("id") String id,@Param("hall_name") String hall_name,@Param("begin_time") Date begin_time,
+    void saveOcr(@Param("id") String id,@Param("hall_name") String hall_name,@Param("begin_time") Date begin_time,
                  @Param("end_time") Date end_time);
     // 保存orc生成文件信息
-    void saveOrcFile(@Param("id") String id,@Param("orc_filename")String orc_filename);
+    void saveOcrFile(@Param("id") String id,@Param("ocr_filename")String ocr_filename);
     // 保存wordcard生成文件信息
     void saveWordcardFile(@Param("id") String id,@Param("wordcard_filename") String wordcard_filename);
     // 保存action生成文件信息

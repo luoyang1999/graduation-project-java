@@ -4,7 +4,7 @@
 
     <insert id="save" parameterType="Analysis">
         insert into t_analysis
-        values(#{id},#{file_id},#{hall_name},#{begin_time},#{end_time},#{ocr_filename},#{wordcard_filename},#{action_filename},#{video_filename})
+        values(#{id},#{task_name},#{file_id},#{hall_name},#{remark},#{begin_time},#{end_time},#{ocr_filename},#{wordcard_filename},#{action_filename},#{video_filename})
     </insert>
     
     <!--保存营业厅名称 开始时间结束时间-->
@@ -14,10 +14,10 @@
         where id=#{id}
     </update>
 
-    <!--保存orc文件saveOrcFile-->
-    <update id="saveOrcFile">
+    <!--保存orc文件saveOcrFile-->
+    <update id="saveOcrFile">
         update t_analysis
-        set orc_filename=#{orc_filename}
+        set ocr_filename=#{ocr_filename}
         where id=#{id}
     </update>
 
@@ -50,12 +50,15 @@
 
     <!--findAll-->
     <select id="findAll" resultType="Analysis">
-        select * from t_analysis
+        select
+        t_analysis.id,task_name,file_id,t_file.old_name,hall_name,remark,begin_time,end_time,ocr_filename,wordcard_filename,action_filename,video_filename
+        from t_analysis,t_file
+        where t_analysis.file_id=t_file.id
     </select>
 
     <select id="findAnalysisByPage" resultType="Analysis">
         select
-        t_analysis.id,file_id,t_file.old_name,hall_name,begin_time,end_time,ocr_filename,wordcard_filename,action_filename,video_filename
+        t_analysis.id,task_name,file_id,t_file.old_name,hall_name,remark,begin_time,end_time,ocr_filename,wordcard_filename,action_filename,video_filename
         from t_analysis,t_file
         where t_analysis.file_id=t_file.id
         limit #{start},#{rows}

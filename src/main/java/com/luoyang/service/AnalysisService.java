@@ -10,9 +10,9 @@ public interface AnalysisService {
     // 保存上传文件记录
     void save(Analysis analysis);
     // 保存hallname begintime endtime
-    void saveOrc(String id, String hall_name, Date begin_time, Date end_time);
+    void saveOcr(String id, String hall_name, Date begin_time, Date end_time);
     // 保存orc生成文件信息
-    void saveOrcFile(String id,String orc_filename);
+    void saveOcrFile(String id,String orc_filename);
     // 保存wordcard生成文件信息
     void saveWordcardFile(String id, String wordcard_filename);
     // 保存action生成文件信息

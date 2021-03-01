@@ -7,6 +7,7 @@ import com.luoyang.service.AnalysisService;
 import com.luoyang.service.FileService;
 import com.luoyang.utils.NonStaticResourceHttpRequestHandler;
 import com.luoyang.utils.PythonInvoke;
+import com.luoyang.websocket.WebSocketServer;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
@@ -87,17 +88,17 @@ public class AnalysisController {
     public Map<String,Object> submitForm(@RequestBody Submit submit) throws IOException, ExecutionException, InterruptedException {
         // 将分析请求存储到数据库中
         Analysis analysis = new Analysis();
+        analysis.setTask_name(submit.getTask_name());
         analysis.setId(UUID.randomUUID().toString());
         analysis.setFile_id(submit.getFile_id());
         analysis.setHall_name(submit.getHall_name());
-        analysis.setOld_name(submit.getName());
+
         analysisService.save(analysis);
         // 取得
         UserFile userFile = fileService.findById(submit.getFile_id());
         // 根据文件名称和路径 获取文件输入流
         String[] fileSplit = userFile.getNew_name().split("\\.");
         String fileNameInput = fileSplit[0] + "." + fileSplit[1];
-        String fileNameOutput = fileSplit[0] + "x" + "." + fileSplit[1];
         String inputPath =
                 ResourceUtils.getURL("classpath:").getPath().substring(1) + "static" + userFile.getPath() + "/" + fileNameInput;
         String outputPath =
@@ -108,11 +109,11 @@ public class AnalysisController {
         for(String type : submit.getType()){
             switch (type) {
                 case "OCR分析": {
-                    String para = "cmd /c activate py38 && python JavaOrc.py" + " -i " + inputPath +
+                    String para = "cmd /c activate py38 && python JavaOcr.py" + " -i " + inputPath +
                             " -o " + outputPath + " -n " + submit.getHall_name();
                     System.out.println(para);
-                    File dir = new File("C://Users/13216/PycharmProjects/TorchLearn/OrcRec");
-                    FutureTask<Integer> futureTask = new FutureTask<>(new PythonInvoke(para, dir, type, fileNameOutput,
+                    File dir = new File("C://Users/13216/PycharmProjects/TorchLearn/OcrRec");
+                    FutureTask<Integer> futureTask = new FutureTask<>(new PythonInvoke(para, dir, type,
                             analysis.getId(), analysisService));
                     Thread t1 = new Thread(futureTask, "ocr");
                     t1.start();
@@ -124,7 +125,7 @@ public class AnalysisController {
                             " -o " + outputPath;
                     System.out.println(para);
                     File dir = new File("C://Users/13216/PycharmProjects/TorchLearn/WorkCardRec");
-                    FutureTask<Integer> futureTask = new FutureTask<>(new PythonInvoke(para, dir, type, fileNameOutput,
+                    FutureTask<Integer> futureTask = new FutureTask<>(new PythonInvoke(para, dir, type,
                             analysis.getId(), analysisService));
                     Thread t2 = new Thread(futureTask, "wordcard");
                     t2.start();
@@ -133,6 +134,7 @@ public class AnalysisController {
                 }
                 case "人体行为识别":
                     System.out.println("人体行为识别python接口待完善");
+                    WebSocketServer.sendInfo("分析完成","111");
                     break;
             }
         }

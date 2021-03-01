@@ -145,6 +145,18 @@ public class FileController {
         return result;
     }
 
+    // 返回文件总数量
+    @GetMapping("getNum")
+    public int getNum(){
+        return fileService.findTotals();
+    }
+
+    // 返回文件总大小
+    @GetMapping("findTotalSize")
+    public int getTotalSize(){
+        return fileService.findTotalSize();
+    }
+
     // 文件删除
     @GetMapping("delete")
     public Map<String,Object> delete(String id) throws FileNotFoundException {

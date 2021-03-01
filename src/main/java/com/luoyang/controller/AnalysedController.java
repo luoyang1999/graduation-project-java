@@ -17,15 +17,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.luoyang.utils.SchartsJson.getWordcardJson;
+import static com.luoyang.utils.SchartsJson.txtToArrayList;
 
 @RestController
 @RequestMapping("analysed")
@@ -47,10 +52,49 @@ public class AnalysedController {
         pageNow = pageNow==null?1:pageNow;
         pageSize = pageSize==null?6:pageSize;
         List<Analysis> analysises = analysisService.findAnalysisByPage(pageNow, pageSize);
+        System.out.println(analysises);
         Integer totals = analysisService.findAnalysisTotal();
         result.put("analysis",analysises);
         result.put("total",totals);
         return result;
+    }
+
+    @GetMapping("findAll")
+    public List<Analysis> findAll(){
+        return analysisService.findAll();
+    }
+
+    @GetMapping("getWordCardJson")
+    public Map<String,Object> getChart(String id){
+        Map<String, Object> result = new HashMap<>();
+        try{
+            // 根据文件名称和路径 获取文件路径
+            Analysis analysis = analysisService.findById(id);
+            UserFile userFile = fileService.findById(analysis.getFile_id());
+            String realPath = ResourceUtils.getURL("classpath:").getPath().substring(1) + "static" + userFile.getPath();
+
+            // 根据wordcard.txt得到绘图的json格式
+            String filename = realPath + "/wordcard.txt";
+            ArrayList<String> arrayList = txtToArrayList(filename);
+
+            Map<String, Object> map = getWordcardJson(arrayList);
+            result = map;
+            result.put("status",true);
+            result.put("msg","获取成功");
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            result.put("success",false);
+            result.put("msg","删除失败：抛出异常 "+e.getMessage());
+        }
+
+        return result;
+    }
+
+    // 返回分析总数量
+    @GetMapping("getNum")
+    public int getNum(){
+        return analysisService.findAnalysisTotal();
     }
 
     @GetMapping("delete")
@@ -115,8 +159,7 @@ public class AnalysedController {
         // 根据文件名称和路径 获取文件输入流
         String realPath = ResourceUtils.getURL("classpath:").getPath().substring(1) + "static" + userFile.getPath();
 
-        Path filePath = Paths.get(realPath,analysis.getWordcard_filename());
-        System.out.println(filePath);
+        Path filePath = Paths.get(realPath,analysis.getVideo_filename());
 
         if (Files.exists(filePath)) {
             System.out.println("file exists");
@@ -142,7 +185,7 @@ public class AnalysedController {
 
         // 根据文件名称和路径 获取文件输入流
         String realPath = ResourceUtils.getURL("classpath:").getPath().substring(1) + "static" + userFile.getPath();
-        FileInputStream is = new FileInputStream(new File(realPath, analysis.getWordcard_filename()));
+        FileInputStream is = new FileInputStream(new File(realPath, analysis.getVideo_filename()));
 
         // 设置附件下载
         response.setContentType("application/octet-stream");

@@ -12,4 +12,44 @@
         select id from t_user where username=#{username} and password=#{password}
     </select>
 
+    <!--设置登陆时间-->
+    <update id="setTime">
+        update t_user
+        set login_time=#{login_time}
+        where username=#{username}
+    </update>
+
+    <!--获取登陆时间-->
+    <select id="getTime" parameterType="String" resultType="Date">
+        select login_time from t_user
+        where username=#{username}
+    </select>
+
+    <!--获取全部用户信息-->
+    <select id="getUserList" resultType="User">
+        select id,username,login_time,create_time
+        from t_user
+        where username!="admin"
+    </select>
+
+    <!--根据id删除用户-->
+    <delete id="delete" parameterType="String">
+        delete from t_user
+        where id=#{id}
+    </delete>
+
+    <!--重置用户密码-->
+    <update id="reset">
+        update t_user
+        set password=#{password}
+        where id=#{id}
+    </update>
+
+    <!--修改用户密码-->
+    <update id="fixPassword">
+        update t_user
+        set password=#{newPassword}
+        where username=#{username} and password=#{oldPassword}
+    </update>
+
 </mapper>

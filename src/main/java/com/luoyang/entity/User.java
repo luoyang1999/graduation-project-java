@@ -1,5 +1,6 @@
 package com.luoyang.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,8 @@ public class User {
     private String id;
     private String username;
     private String password;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date login_time;
-    private Date last_time;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date create_time;
 }

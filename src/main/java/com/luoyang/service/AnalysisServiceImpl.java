@@ -24,13 +24,13 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
     @Override
-    public void saveOrc(String id, String hall_name, Date begin_time, Date end_time) {
-        analysisDAO.saveOrc(id,hall_name,begin_time,end_time);
+    public void saveOcr(String id, String hall_name, Date begin_time, Date end_time) {
+        analysisDAO.saveOcr(id,hall_name,begin_time,end_time);
     }
 
     @Override
-    public void saveOrcFile(String id, String orc_filename) {
-        analysisDAO.saveOrcFile(id,orc_filename);
+    public void saveOcrFile(String id, String orc_filename) {
+        analysisDAO.saveOcrFile(id,orc_filename);
     }
 
     @Override

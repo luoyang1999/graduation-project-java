@@ -34,6 +34,12 @@ public class CameraController {
         return result;
     }
 
+    // 返回摄像头总数量
+    @GetMapping("getNum")
+    public int getNum(){
+        return cameraService.findTotal();
+    }
+
     // 删除记录
     @GetMapping("delete")
     public Map<String,Object> delete(String ip){

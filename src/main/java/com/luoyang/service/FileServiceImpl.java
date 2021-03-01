@@ -47,4 +47,9 @@ public class FileServiceImpl implements FileService{
     public Integer findTotals() {
         return fileDAO.findTotals();
     }
+
+    @Override
+    public Integer findTotalSize() {
+        return fileDAO.findTotalSize();
+    }
 }

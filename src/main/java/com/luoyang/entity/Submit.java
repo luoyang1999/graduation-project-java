@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class Submit {
-    private String name;
+    private String task_name;
     private String file_id;
     private String hall_name;
     private Boolean immediately;
